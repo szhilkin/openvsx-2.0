@@ -1,0 +1,169 @@
+#!/bin/rc
+
+rfork
+
+z = `{basename $0}
+fn usage {
+	echo >[1=2] usage: $z [ file source-lv target-lv ]
+	exit usage
+}
+if (~ $1 '-?')
+	usage
+
+switch ($release) {
+case VSX-1.3.2-R*
+
+case VSX-1.3.5-R*
+
+case VSX-1.3.6-R*
+
+case VSX-1.5.*-R*
+
+case *
+	echo Unknown release $release. Please upgrade to VSX 1.3.6.
+	exit release
+}
+
+switch ($#*) {
+case 0			# gather LVs for download
+
+ip=`{myipaddr}
+shelf=`{cat /n/xlate/targ/shelf}
+fname=vsx$shelf^-$ip.txt
+
+cd /n/xlate/lv
+ls -tr | sed 's|.*|echo -n & m;'^'cat &/status;echo|' |
+rc > /app/scp/$fname
+echo '# scp admin@'$ip':'$fname' .'
+
+case 3			# make snapshots match
+
+# if (! ~ $release VSX-1.5.*-R*) {
+#	echo Please upgrade to VSX 1.5.
+# }
+
+file=$1
+srclv=$2
+tgtlv=$3
+
+if (! test -r /app/scp/$file) {
+	echo error: file $file does not exist
+	exit file
+}
+sfile=/app/scp/$file
+
+cd /n/xlate/lv
+
+if (! grep -s '^'$srclv^' .* normal ' $sfile) {
+	echo error: source LV $srclv not found in $file
+	exit source
+}
+if (! grep -s '^'$srclv^'\.[0-9]+ ' $sfile) {
+	echo LV $srclv has no snapshots, so conversion is not needed.
+	exit
+}
+if (! test -r $tgtlv/status) {
+	echo error: target LV $tgtlv does not exist
+	exit target
+}
+if (! grep -s ' normal ' $tgtlv/status) {
+	echo error: LV $tgtlv is a snapshot
+	exit snap
+}
+if (! ls | grep -s $tgtlv'\..+') {
+	echo LV $tgtlv has no snaphots, so conversion is not needed.
+	exit
+}
+grep '^'$srclv^'\.[0-9]+ ' $sfile |
+sed '
+s/^[^.]+\.//
+s/([^ ]+) [^ ]+ [^ ]+ [^ ]+ [^ ]+ [^ ]+ ([^ ]+) .*/\1 \2/
+' | sort -n > /app/scp/$srclv.src
+
+ls -tr | grep $tgtlv'\..+' | sed 's|.*|echo -n & m;'^'cat &/status;echo|' |
+rc | sed '
+s/^[^.]+\.//
+s/([^ ]+) [^ ]+ [^ ]+ [^ ]+ [^ ]+ [^ ]+ ([^ ]+) .*/\1 \2/
+' | sort -n > /app/scp/$tgtlv.tgt
+
+awk -v 'srclv='$srclv -v 'tgtlv='$tgtlv '
+NR == FNR {
+	snum[FNR] = $1; stime[$1] = $2; snumt[$2] = $1; smax = FNR; next
+}
+NR != FNR {
+	tnum[FNR] = $1; ttime[$1] = $2; tnumt[$2] = $1; tmax = FNR; next
+}
+function preamble() {
+	if (pcnt == 0) {
+		print "Problems that must be fixed:"
+	}
+	printf "%s. ", ++pcnt
+}
+END {
+	# list snapshots sorted by timestamp
+
+	snr = 1; tnr = 1
+	fmt = "%12s %16s.%-10s %16s.%-10s\n"
+	printf fmt, "TIME", "SOURCE", "NUM", "TARGET", "NUM"
+	while (snr <= smax) {
+		stm = stime[snum[snr]]
+		if (tnr > tmax) {
+			printf fmt, stm, srclv, snum[snr], "", ""
+			snr++
+			continue
+		}
+		while (tnr <= tmax) {
+			ttm = ttime[tnum[tnr]]
+			if (ttm < stm) {
+				printf fmt, ttm, "", "", tgtlv, tnum[tnr]
+				tnr++;
+			} else if (ttm > stm) {
+				printf fmt, stm, srclv, snum[snr], "", ""
+				snr++; break
+			} else {
+				printf fmt, ttm, srclv, snum[snr], tgtlv, tnum[tnr]
+				snr++; tnr++; break
+			}
+		}
+	}
+	for (; tnr <= tmax; tnr++)
+		printf fmt, ttime[tnum[tnr]], "", "", tgtlv, tnum[tnr]
+
+	# check for compatible snapshot histories
+
+	for (snr = 1; snr <= smax; snr++) {
+		n = snum[snr]
+		stm = stime[n]
+		ttm = ttime[n]
+		if (ttm && stm != ttm) {
+			preamble()
+			fmt = "source %s.%s and target %s.%s do not have the same time\n"
+			printf fmt, srclv, n, tgtlv, n
+		}
+		if (tnumt[stm] && tnumt[stm] != n) {
+			preamble()
+			fmt = "source %s.%s and target %s.%s have the same time\n"
+			printf fmt, srclv, n, tgtlv, tnumt[stm]
+		}
+	}
+	for (tnr = 1; tnr <= tmax; tnr++) {
+		n = tnum[tnr]
+		ttm = ttime[n]
+		if (snumt[ttm] && snumt[ttm] != n) {
+			preamble()
+			fmt = "source %s.%s and target %s.%s have the same time\n"
+			printf fmt, srclv, snumt[ttm], tgtlv, n
+		}
+	}
+	n = tnum[tmax]
+	if (stime[n] == "") {
+		preamble()
+		fmt = "most recent target %s.%s does not exist in source\n"
+		printf fmt, tgtlv, n
+	}
+}
+' /app/scp/$srclv.src /app/scp/$tgtlv.tgt
+
+case *
+	usage
+}

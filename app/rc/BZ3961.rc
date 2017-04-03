@@ -1,0 +1,45 @@
+#!/bin/rc
+#
+# workaround for
+# BZ3961 - Controller unrecognized after reboot, resulting in loss of two ports
+
+rfork
+
+if (~ $model '') {
+	exit
+}
+
+mports=''
+
+switch ($model) {
+	case *-G
+	case *-G6
+		mports=8
+	case *-*2
+		mports=4
+	case *-*4
+		mports=6
+	case *-*8
+		mports=10
+}
+
+ports=`{ls -d /net/ether* | wc -l}
+flag=/n/kfs/BZ3961
+err='Error: not enough SAN ports. Please contact Coraid TAC.'
+warn='Not enough SAN ports. Rebooting to resolve the problem.'
+
+if (test $ports -lt $mports) {
+	if (test -e $flag) {
+		while () {
+			syslogtest $err
+			sleep 30
+		}
+	}
+	if not {
+		syslogtest $warn
+		> $flag
+		sleep 5
+		reboot
+	}
+}
+if not rm -f $flag

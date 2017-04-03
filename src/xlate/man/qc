@@ -1,0 +1,29 @@
+.TH QC 6
+.SH NAME
+query/config \- config information used by the VSX
+.SH SYNOPSIS
+com.coraid.vsx
+.I shelf-number
+.I UUID
+.B [
+.I UUID extent
+.B ]
+.SH DESCRIPTION
+.B NEEDS EXPANDING.
+.PP
+The query/config string allows the VSX appliance to find a constituant
+volumes.
+The
+.I shelf-number
+specifies the shelf of the VSX.
+.I UUID
+is the universally unique identifier for the volume.
+The optional
+.I UUID
+and
+.I extent
+is used if the volume is a legacy and has to keep metadata on another physical volume.
+The uuid will allow the vsx to identify which pool the volume is a part of and the
+location of the volume's metadata.
+.I Extent
+is the metadata number of the volume's label.

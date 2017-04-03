@@ -1,0 +1,1 @@
+The shelf command displays and sets the VSX base shelf address.  This address is the base of a range of 16 shelf addresses useable for LUN exports.  Changing the base shelf address with LUNs defined moves the LUNs to the new base shelf range.  As a result, all LUNs must be offline in order to change the base shelf address. Confirmation is required.

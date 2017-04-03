@@ -1,0 +1,113 @@
+.TH PV 6
+.SH NAME
+pv \- physical volume label on AoE target
+.SH SYNOPSIS
+.IR magic [4]
+.IR status [4]
+.IR UUID [8]
+.IR ctime [4]
+.IR mtime [4]
+.IR aoedata [4]
+.IR aoemeta [4]
+.IR aoemirror [4]
+.IR length [8]
+.IR npve [4]
+.IR PV [ n ]
+.IR pvname [ s ]
+.IR pvlabel [ s ]
+.IR poolname [ s ]
+.IR poollabel [ s ]
+.SH DESCRIPTION
+This page describes the physical volume label.
+The label is described using the notation used in the Plan 9
+documentation for the 9P protoocol.
+See intro(5).
+.PP
+The physical volume label is almost always the first extent on a target.
+It enables the VSX to recreate volume pools and recreate the logical volumes
+and online exported luns.
+.PP
+The label is laid out as follows:
+.TP
+.I magic\f1[4]\fP
+the string "VSX0"
+.TP
+.I status\f1[4]\fP
+indicates current status of PV
+.TP
+.I UUID\f1[8]\fP
+this volume's universal unique identifier
+.TP
+.I ctime\f1[4]\fP
+the time this volume was created
+.TP
+.I mtime\f1[4]\fP
+the last time this pool was modified
+.TP
+.I aoedata\f1[4]\fP
+the underlying AoE target with the storage
+.TP
+.I aoemeta\f1[4]\fP
+target with to store the metadata
+.TP
+.I aoemirror\f1[4]\fP
+partner mirror to aoedata
+.TP
+.I length\f1[8]\fP
+in bytes of the physical volume
+.TP
+.I npve\f1[4]\fP
+number of extents on this volume
+.TP
+.I PV\f1[ n ]\fP
+physical volumes in this pool
+.TP
+.I pvname\f1[ s ]\fP
+name of this physical volume
+.TP
+.I pvlabel\f1[ s ]\fP
+label for the volume
+.TP
+.I poolname\f1[ s ]\fP
+name of the pool of which the volume is a member
+.TP
+.I poollabel\f1[ s ]\fP
+and its label
+.PP
+The format of a PV is as follows:
+.TP
+.I UUID\f1[9]\fP
+the pool member uuid
+.TP
+.I aoetarget\f1[4]\fP
+the metadata target for the volume
+.PP
+Notice that we want to know the metadata target.
+It will have the other targets.
+.PP
+The number of PV slots are usually greater than the actual
+number of PVs in the pool.
+We need to preserve the index into the PV table since
+they are referenced by the logical volume table.
+Unused slots contain zero.
+.SS
+Mirroring
+.PP
+.I Aoemirror is the target that is an exact copy of the primary.
+If the primary fails,
+the aoemirror and aoedata will swap values
+and the status will be broke mirror.
+Any elements in the pool that store data on the target will
+have its
+.I aoemeta
+variable changed to be the new primary.
+The dirty bit in the PVE will be used to keep track
+of extents changed since the mirror broke.
+If the broken half is reunited with its partner
+only the dirty blocks will be copied.
+If the broken mirror is mated to a new partner
+all the blocks are copied.
+All writes will go to both.
+Only reads will be serviced from the primary.
+.\"Brantley Coile
+.\"Soli Deo Gloria

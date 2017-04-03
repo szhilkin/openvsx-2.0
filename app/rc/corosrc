@@ -1,0 +1,29 @@
+#!/bin/rc
+
+app/rc/conv1.0to1.3 >[2]/tmp/conv1.0to1.3
+
+for ( e in 0 1 ) {
+	echo bind ether /net/ether$e > /net/ipifc/clone
+}
+sysconfrc
+
+for (e in 0 1 2 3 4 5 6 7 8 9)
+	bind -qa '#l'$e /n/sys/net/ports
+
+/app/rc/BZ3961.rc &
+
+nsdrc
+
+aux/listen -q -t /rc/bin/service.auth tcp
+
+#ndb/cs
+#ndb/dns -r
+
+sysloginit
+timeinit
+
+hainit
+
+/rc/cpns.rc
+
+echo -n 'VSX EXPERTMODE# ' > /env/prompt

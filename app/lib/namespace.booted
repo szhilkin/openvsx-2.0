@@ -1,0 +1,18 @@
+mount /srv/hasrv.xlate /n/xlate
+mount /srv/remote /n/remote
+mount /srv/haconf /n/ha
+mount /srv/nsd /n/nsd
+bind -a #l0 /n/sys/net/ports
+bind -a #l1 /n/sys/net/ports
+bind -a #l2 /n/sys/net/ports
+bind -a #l3 /n/sys/net/ports
+bind -a #l4 /n/sys/net/ports
+bind -a #l5 /n/sys/net/ports
+bind -a #l6 /n/sys/net/ports
+bind -a #l7 /n/sys/net/ports
+bind -a #l8 /n/sys/net/ports
+bind -a #l9 /n/sys/net/ports
+bind -a #I/tcp /n/sys/net/tcp
+#bind -b #ë /n/sys/net/el
+
+bind #c/kprint /n/sys/events

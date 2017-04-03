@@ -1,0 +1,6 @@
+The wstat command displays the status of all mirror and shadow processes.  The displayed status includes a description of the process, percentage done, transfer rate (in megabytes per second), and an estimated time to completion (TTC).  The TTC format is dd:hh:mm:ss  
+	dd - Days
+	hh - Hours
+	mm - Minutes
+	ss - Seconds
+Days are only printed when necessary.

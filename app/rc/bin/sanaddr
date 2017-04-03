@@ -1,0 +1,20 @@
+#!/bin/rc
+
+z = `{basename $0}
+fn usage {
+	echo >[2=1] usage: $z
+	exit usage
+}
+
+if (~ $1 '-?')
+	usage
+
+p=/net/el/addr
+switch ($#*) {
+case 0
+	myel=`{cat $p}
+	echo SAN ADDRESS
+	echo $myel
+case *
+	usage
+}

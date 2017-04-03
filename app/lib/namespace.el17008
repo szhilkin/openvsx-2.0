@@ -1,0 +1,13 @@
+mount #s/haconf ha
+mount #s/rrfs rr
+mount #s/hasrv.xlate xlate
+mount #s/nsd nsd
+
+bind -a #l2 sys/net/ports
+bind -a #l3 sys/net/ports
+bind -a #l4 sys/net/ports
+bind -a #l5 sys/net/ports
+bind -a #l6 sys/net/ports
+bind -a #l7 sys/net/ports
+bind -a #l8 sys/net/ports
+bind -a #l9 sys/net/ports

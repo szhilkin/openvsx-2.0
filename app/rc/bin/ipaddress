@@ -1,0 +1,33 @@
+#!/bin/rc
+
+z=`{basename $0}
+fn usage {
+	echo >[1=2] usage: $z '[ { ether0 | ether1 } address mask ]'
+	exit usage
+}
+
+if (~ $1 '-?')
+	usage
+
+switch ($#*) {
+case 0
+	echo | awk '{ printf("%-6s %15s %15s\n", "PORT", "IP ADDRESS", "MASK"); }'
+	for (e in ether0 ether1) {
+		i=`{grep $e /n/sys/net/ipaddr}
+		if (~ $i '')
+			echo $e | awk '{printf("%-6s %15s %15s\n", $1, "unset", "unset"); }'
+		if not
+			echo $i | awk '{printf("%-6s %15s %15s\n", $1, $2, $3); }'
+	}
+
+case 3
+     switch ($1) {
+     case ether[0-1]
+          fprint /n/sys/net/ipaddr $*
+     case *
+          echo invalid interface $1
+          usage
+     }
+case *
+     usage
+}

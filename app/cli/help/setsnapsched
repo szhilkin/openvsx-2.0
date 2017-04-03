@@ -1,0 +1,33 @@
+The setsnapsched command sets the schedule for automated snapshots one or more LVs. Scheduled snapshots will not commence until setsnaplimit has been successfully issued. 
+
+A schedule class is the first parameter. This may be hourly, daily, weekly, monthly, or yearly. This determines the frequency of the snapshot. An LV may have up to 32 snapshot schedules in any combination of classes.
+
+The second parameter is dependent on the class. It describes exactly when to execute a schedule snapshot. For classes that take an hour of the day, use the 24-hour time. To specify a day of the week, or a month, you may use the first three characters of the word.
+
+The third parameter is the retain count. This is the minimum number of schedule snapshots that should be retained for the class. The special retain count hold specifies that the snapshot will not be deleted.
+
+The fourth parameter, and additional optional parameters, are LV names.
+
+Schedule a snapshot of lv1 on 27th minute of every hour and retain 10 of these snapshots:
+
+	setsnapsched hourly @27 10 lv1
+
+Schedule a snapshot of lv1 daily at 23:30 and retain 7 of these snapshots:
+
+	setsnapsched daily @23:30 7 lv1
+
+Schedule a snapshot of lv1 weekly on Sunday at 3:00 and retain 6 of these snapshots:
+
+	setsnapsched weekly Sun@3:00 6 lv1
+
+Schedule a snapshot of lv1on the first day of every month at 4:00 and never automatically delete these snapshots.
+
+	setsnapsched monthly 1@4:00 hold lv1
+
+Schedule a snapshot of lv1 every year on March 1st at 12:00 and never automatically delete these snapshots.
+
+	setsnapsched yearly Mar.1@12:00 hold lv1
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	setsnapsched h @15 10  LV00-10

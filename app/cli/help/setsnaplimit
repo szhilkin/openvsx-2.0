@@ -1,0 +1,13 @@
+The setsnaplimit command sets the potential storage limit for snapshots on a LV.
+
+A size limit is the first parameter to setsnaplimit. The size parameter may have a unit of T, G, M, or K. This is the maximum amount of space that could be used for snapshots. When this limit is reached old snapshots may be removed to free up space.
+
+In addition to a size limit, the first parameter may also be the string ignore. Setting the limit to ignore means that snapshots will not be automatically removed based on the amount of storage used.
+
+The snapshot limit size is not immediately allocated. The size represents the maximum amount of storage that may be taken from the LV's pool.
+
+When a snapshot is requested the number of used extents in the LV is added to the number of snap extents in the LV's snapshots. If the total space is greater than the LV's snaplimit the snapshot request will be denied. Confirmation is required.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	setsnaplimit 10T LV00-10

@@ -1,0 +1,151 @@
+failover.
+
+1:1 and latches.
+
+secondary detects failure and takes charge.
+we have to know that our role is primary or secondary.
+we also have to know if we are authorized to be the active unit.
+we try using multiple connections to get talk betweek the primary
+and secondary unit.
+
+first time boot, i have no role.
+you tell me if i'm primary or secondary.
+tell me the address of the other unit.
+need to force active state.
+
+if you tell me i'm primary i'll launch xlate.
+
+when you tell me my partner i'll try to connect to his ha service.
+both connect to each other.
+
+
+
+when booting, connect to other side.
+
+both systems up.
+secondary knows it's the secondary and not active.
+primary knows it's the primary and active.
+
+
+one of the systems has the role of primary.
+it starts a service and waits to be connected.
+if will only accept connections from the secondary.
+
+configuration variables needed: harole, hastate, ipaddresses of partner.
+
+the other is label secondary and connects to the primary.
+
+use /srv/ha just for a named pipe to send commands to the ha proc.
+
+cmds:
+	? ->
+	go_active	bring up the app
+	go_inactive	bring downthe app
+
+
+protocol between ha servers should be ascii.
+cmds: status -> role, state
+role ::= PRIMARY | SECONDARY
+state ::= ACTIVE NOT-ACTIVE
+
+status
+
+Primary		connected	not connected	active	not active
+Secondary	connected	not connected	active	not active
+
+status on secondary
+not connected, secondary active
+connected, secondary active
+connected, primary active
+
+
+
+install first vsx
+	rack
+	configure shelf
+	assign role as primary; becomes active
+	assigne ip addresses of standby vsx
+	launches ha server
+	
+install standby vsx
+	rack
+	assign role as secondary; becomes inactive
+	assign ip addresses of primary vsx
+	connects to connect with primary
+
+	primary accepts connection
+	exchange challenges and responses (use factotum)
+	
+		p->s	ok
+		
+		s->p	login
+		p->s  	chan <challange>
+		s->p	resp <answer>
+		p->s	ok|no
+		
+		s->p	status
+		p->s	(active|inactive)
+		
+		s->p	ls <path>
+		p->s	<line from ls -l>
+		
+		s->p	go (active|inactive)
+		p->s	ok
+		
+		s->p	getconf
+		p->s	/* lines of configuration ending with "ok"
+		
+		s->p	putconf
+		p->s	input
+		s->p	data
+		s->p	data
+			...
+		s->p	"."
+		p->s	ok
+		
+		s->p	\n
+		p->s	ok
+		
+	
+		
+arguments to haserv,
+
+haserve [-r primary|secondary][-c path][-x cmd] [ipaddress ...]
+
+	-r	role (primary|secondary)
+	-c	path to config file
+	-x	string to invoke command: include format of %R--role
+	
+
+
+---
+this file of notes are no very useful--scratching out thoughts only.
+
+protect.
+
+connect to ha primary.
+do loging as in haclient
+status--active or inactive
+	am i active or inactive?
+	
+list conf--is mine more recent?
+	is the other side active?
+	
+events:
+	user command me to go active or go inactive
+	status shows the other side is inactive
+	alarm on read of command response
+
+threads:
+	watch the console port in /srv ala kfscmd
+	for each primary being watched
+		every 30 seconds
+			status, list
+			if file changes, get it.
+			
+
+	
+	
+	
+	
+	

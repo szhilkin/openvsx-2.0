@@ -1,0 +1,33 @@
+// acid utilities appended to xlatelib.acid
+
+defn lvdumprex(rex) {
+	local lv, name;
+
+	lv = *vols;
+	while lv != 0 do {
+		name = *(lv.name\s);
+		if regexp(rex, name) then {
+			print("Name: ", name, "\n");
+			print("Address: ", lv\X, "\n");
+			print(lv, "\n\n");
+		}
+		lv = lv.next;
+	}
+}
+
+defn lvdump(){
+	lvdumprex(".");
+}
+
+defn prevsnaps(){
+	local lv;
+
+	lv = *vols;
+	while lv != 0 do {
+		print("Name: ");
+		mem(lv.name, "s");
+		print("Address: ", fmt(lv, 'X'), "\n");
+		print("Prevsnap: ", lv.prevsnap, "\n\n");
+		lv = lv.next;
+	}
+}

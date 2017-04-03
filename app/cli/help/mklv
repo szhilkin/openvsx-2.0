@@ -1,0 +1,9 @@
+The mklv command creates logical volumes (LVs) from a specified pool.  The size of the LV must be entered in decimal form with a T, G, M or K suffix to indicate the size in Terabytes, Gigabytes, Megabytes, or Kilobytes, respectively. If no suffix is specified, the number specified is interpreted as a byte count.
+
+By default data extents are immediately allocated from the pool.  The optional flag -t will create a thinly provisioned LV. Data extents will be allocated as needed.
+
+LV names must be alphanumeric, no more than 16 characters, and must be unique across all pools.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	mklv pool 100G lv00-10

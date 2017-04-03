@@ -1,0 +1,24 @@
+#!/bin/rc
+
+z=`{basename $0}
+
+fn usage {
+	echo >[1=2] 'usage: '$z' model ipaddress date'
+	exit usage
+}
+
+if (~ $1 '-?')
+	usage
+
+if (! ~ $#* 3)
+	usage
+
+if (test -e /n/ha/role)
+	r=`{cat /n/ha/role}
+if not
+	r='role'
+if (test -e /env/shelf)
+	s=`{cat /env/shelf}
+if not
+	s='inactive'
+echo $1^_$2^_$r^_$s^_$3.txt

@@ -1,0 +1,11 @@
+#!/bin/rc
+
+z=`{basename $0}
+r=`{cat /n/ha/role}
+rem=`{cat /n/ha/remote}
+if (~ primary $r && ~ connected $rem(2)) {
+	echo HA Secondary VSX SAN address $rem(1) monitors this VSX
+	echo $z requires a severed HA connection to continue
+	echo Contact Coraid TAC for additional assistance 
+	exit HA
+} >[1=2]

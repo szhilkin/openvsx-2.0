@@ -1,0 +1,7 @@
+The mirror command establishes a mirror relationship between a PV and an SR/SRX target LUN. The specified target LUN may not already be in use (as a PV, shadow target, or another mirror target).  The target LUN must be of equal or greater size than the source PV.
+
+The mirror command has two possible executions.  For a simple mirror of one PV to an SR/SRX target LUN, the 'to' keyword can be omitted. To mirror more than one PV at a time, balance an equal number of PV elements and mirror targets separated by the 'to' keyword.  The first PV specified is matched to the first mirror target, followed by the second PV to the second mirror target, and so on. The number of specified PVs must match the number of SR/SRX target LUNs.
+
+Series ranging (see 'help series') may be used to specify PVs and mirror targets:
+
+	mirror 100.0-10 to 200.0-10

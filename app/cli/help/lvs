@@ -1,0 +1,5 @@
+The lvs command displays all LVs in all defined pools.  The display list can be restricted by providing one or more LV arguments.  The displayed status includes LV name, size in gigabytes, read/write mode, assigned LUN (if any), pool, provision, shadow target (if any), and state. The -a flag displays additional information often useful for Coraid Technical Support.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	lvs LV00-10

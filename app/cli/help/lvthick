@@ -1,0 +1,7 @@
+The lvthick command transforms thin provisioned LVs into thick provisioned LVs.  For each thin extent in the LV an actual extent in the pool will be allocated. 
+
+The command will fail if the number of thin extents in the LV is greater than the number of free extents in the pool.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+        lvthick lv00-10

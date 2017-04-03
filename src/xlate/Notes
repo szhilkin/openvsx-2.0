@@ -1,0 +1,162 @@
+x	timeouts for etherdrive commands
+x	set config strings
+x	bring up code to feed pvs into xlate
+x	rmpv
+x	mirror io
+x	mirror create 
+x	mirror break 
+x	resliver mirror
+x	snapcopy thread: copy data
+x	snapcopy thread: tell shadow target to snap
+x	only bring up lvs that have all their pvs.
+x	aoe snap command
+x	add masks
+x	Saved on meta data for lv
+x	Restored from meta data
+x	name space access to mask list
+x	add reserve
+x	add name space access to reserve
+After alpha
+	legacy luns
+	legacy emx luns
+	
+After beta
+	migrate
+	oospv	(no new blocks allocated)
+	ispv  	(allow to be used for new blocks)
+	tcp based snapcopy
+
+Tue Jul 20 14:19:02 EDT 2010
+
+add pools
+add pvs to the pools
+mirror pvs
+find pvs on boot from qc
+mirror breaks
+mirror rejoins
+mk volume
+export a lun
+grow luns
+shrink luns
+mk thin luns
+show used space vs fully dilluted space
+mk snapshot
+remove snapshot
+schedule snapsots (auto remove old ones)
+specify a shadow target
+snapcopy to target
+stack multiple snapshots to unavail shadow target
+copy over snapshots during time window
+remove shadow target
+
+
+Wed Jul 21 08:32:06 EDT 2010
+
+The bwrite and bread take a chan, a pointer to a network block,
+and an offset.  Xlate could take a request, translate it and call
+the underlying device with it.  The 
+An aoe target code takes requests
+and 
+
+Fri Jul 23 10:48:41 EDT 2010
+
+The pv tables can use another bit to define where the first logical volume
+extent, the one that describes the volume, is located on the pv.
+The lv might have more extents that are enumerated in the on disk lv structure.
+
+Thu Aug 19 11:43:38 EDT 2010
+
+
+I've moved lunread, lunwrite and lunio to ctl.c.  Lunio now calls xlread and xlwrite,
+and doesn't translat the target variables.  I've decided to use the upper byte of the
+target int as a type of target.  0 means it is an fd, 1 means aoe target.
+
+Wed Aug 25 18:30:01 EDT 2010
+
+Idea for CorOS syscall and feature.
+A read that returns a tag that identifies a received block.
+We would need a way to get at the header, to read the first 36 bytes.
+And a way to write over the first 36 bytes + a bit for redirect.
+And send the data down the pipe to another ethernet interface.
+This would allow us to avoid the copy.
+
+
+Sun Aug 29 15:34:43 EDT 2010
+
+Todo list moved to the top of this file.
+
+Wed Sep  1 13:39:37 EDT 2010
+
+Thinking through the discovery process.
+
+We have the following situations to account for:
+
+	simple, single pv pools.
+	Pools with mutiple pvs, all present.
+	Pools with missing pvs.
+	Pools with legacy pvs.
+	Pools with mirrored pvs.
+	Pools with legacy mirrored pvs.
+	Missing mirror pvs reappearing out of date.
+
+We want to bring up as many lvs as we can.
+We want to update a reappeared mirror pv as efficient as possible.
+
+When a new target appears, we read in the pv metadata and sit
+on it for a while.
+After Tmax, we take a look at each pool.
+If the pool is complete, insert them into the system.
+
+If a pv is old and has no mirror partner
+	it is removed from the set.
+If a legacy pv is missing the metadata pv
+
+
+All pv accounted for.
+Some pvs old.
+	They might have been removed from the pool after they disapeared.
+	We clear the conf and remove it from our set.
+
+Mirror pvs ahve the same conf and same pv structure.
+	We should remove one of the pv structures.
+
+If a pool has a missing pv, we update the mtime and install
+the pool.  The index into the pool table must be the same.
+
+Legacy pools with missing meta pv won't show up in the staging
+area because it doesn't have any pv metadata.
+Seeing the conf is only meaningful if we see the metadata also.
+
+So, first stage of process is to scan the noted targets that
+have our string and shelf.  If not legacy, read in the pv metadata.
+If legcay, see if we have the metadata pv in the list.  If so
+read it the metadata.  Else skip it.
+
+This builds a linked list of pvs for each pool named in the pv.
+
+Do I want to ditch this whole mess by having a config in the VSX that
+I share with a back up VSX?  It would be a list of targets to read
+from.  This would remove the work of figuring out who should be
+included into the pool.  When we loose a pv, we remove it from the
+list.  The list is copied to the backup vsx when it changes.  No
+need for writing the conf on the target.
+
+pool1: 'label'
+	shelf.slot:offset shelf.slot:offset shelf.slot:offset
+pool2:
+	shelf.slot:offset shelf.slot:offset - shelf.slot:offset
+
+The list of targets are in indes order for the pool.  The dash
+represents an empty target.  (The indexes can't change in the pool)
+
+This simplifies the entire process.
+
+The backup vsx uses a service to grab the list.  A simple tcp service
+for now.  Or I can mount the protected server and just read the file
+when it changes.
+
+
+I think I'll ditch all that mutlipe target stuff.  AoE only.
+
+|date
+|fmt

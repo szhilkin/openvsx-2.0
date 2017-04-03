@@ -1,0 +1,35 @@
+#!/bin/rc
+
+z=`{basename $0}
+myaddr=''
+p=/app/scp
+
+fn usage {
+	echo >[1=2] usage: $z
+	exit usage
+}
+
+if (~ $1 '-?')
+	usage
+
+if (test $#* -gt 0)
+	usage
+
+myaddr=`{myipaddr}
+if (~ $myaddr '') {
+	echo Set IP address first.  See help ipaddress.
+	exit unset
+}
+timestamp=`{date -p}
+name=`{echo $myaddr'_'$timestamp.vsxcfg}
+disk/kfscmd allow
+if (tar cf $p/kfs.tar /n/kfs) {
+	echo $serial > $p/serial
+	md5sum $p/kfs.tar > $p/checksums
+	md5sum $p/serial >> $p/checksums
+	tar cf $p/$name $p/kfs.tar $p/serial $p/checksums
+	echo '#' scp admin@^$myaddr:$name .
+}
+if not
+	echo 'error: could not save config'
+disk/kfscmd disallow

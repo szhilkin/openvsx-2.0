@@ -1,0 +1,3 @@
+The promote command promotes a PV mirror target to the primary PV target position, demoting the primary target to the mirror position.  Promotion can only succeed for mirror PVs that are fault-tolerant (state mirrored).
+
+This facility is primarily useful for taking an SR/SRX LUN out of service.  After exchanging PV target roles, the unmirror command may be used to remove the mirror target element.

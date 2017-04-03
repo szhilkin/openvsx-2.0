@@ -1,0 +1,11 @@
+- xlate/ilv
+- xlate/lun/[0-9]*/data$
+- xlate/lv/.*/data$
+- xlate/lv/.*/label$
+- xlate/lv/.*/lvt$
+- xlate/pool/.*/label$
+- xlate/pool/.*/[0-9]*/data$
+- xlate/pool/.*/[0-9]*/histo$
+- xlate/pool/.*/[0-9]*/label$
+- xlate/pool/.*/[0-9]*/pv$
+- xlate/pool/.*/[0-9]*/pvt$

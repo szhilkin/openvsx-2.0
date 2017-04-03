@@ -1,0 +1,5 @@
+The unmirror command removes the SR/SRX mirror target LUN from the specified PV.  Once released, the mirror target LUN is free for reuse.  To remove a PV primary target LUN, promote the mirror target using the promote command, then unmirror the PV. To keep the mirror relationship but break I/O to the mirror target, use the brkmirror command instead.
+
+Series ranging (see 'help series') may be used to specify PVs:
+
+	unmirror 200.0-10

@@ -1,0 +1,5 @@
+The luns command displays all VSX LUNs assigned to LVs.  The display list can be restricted by providing one or more LUN arguments.  The displayed status includes the VSX LUN ID (shelf.lun), online/offline status, LV associated with the VSX LUN, size in gigabytes, read/write mode, and the number of masks assigned to the associated LV.
+
+Series ranging (see 'help series') may be used to specify LUNs:
+
+	luns 100.0-10

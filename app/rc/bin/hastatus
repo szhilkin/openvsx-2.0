@@ -1,0 +1,15 @@
+#!/bin/rc
+
+z=`{basename $0}
+if (~ $1 '-?' || ! ~ $#* 0) {
+        echo >[1=2] usage: $z
+        exit usage
+}
+
+cr=/n/ha/role
+cs=/n/ha/state
+crem=/n/ha/remote
+{
+	echo HAROLE HASTATE PEER STATUS HASTATE
+	echo `{cat $cr} `{cat $cs} `{cat $crem}
+} | awk '{ printf("%-9s %8s %16s %12s %8s\n", $1, $2, $3, $4, $5); }'

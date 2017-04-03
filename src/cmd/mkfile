@@ -1,0 +1,9 @@
+</$objtype/mkfile
+
+TARG=mkpv rmpv pvs mkpool pools rmpool mklv rmlv lvs clone snap lvsnaps rmlv shelf mirror unmirror promote shadowrecv shadowsend unshadow aoestat aoediscover aoeflush online offline readonly readwrite mklegacy mklun rmlun luns mask lvresize wstat rollback lvstats lviops pvstats pviops resetserial maintenancemode clrpvmeta setsnaplimit snaplimit lvtdump setsnapsched snapsched certhash setsecurity security setremote remote clrsnapsched sethold clrhold updatelegacy renumlv restorepool splitpool clrreservation flushlv flushpv brkmirror aoeserial setpoolmode lvthin lvthick destroypool fixsnaplist
+
+HFILES=vsxcmds.h
+OFILES=vsxcmds.$O
+BIN=../../app/$objtype/bin
+
+</sys/src/cmd/mkmany

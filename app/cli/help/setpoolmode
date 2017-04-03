@@ -1,0 +1,5 @@
+The setpoolmode command sets LV data extent allocation mode for one or more specified pools.  Mode 'concat' allocates LV data extents from the first PV in the pool that has enough extents.  Mode 'striped' allocates LV data extents round-robin from all PVs in the pool.
+
+Series ranging (see 'help series') may be used to specify pools:
+
+	setpoolmode striped POOL00-10

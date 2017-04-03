@@ -1,0 +1,37 @@
+#!/bin/rc
+
+haroot=/n/kfs/conf/ha
+echo -n $haroot >'#ec/haroot'
+if (! test -d $haroot) {
+	mkdir $haroot
+	echo active >$haroot/state
+	echo primary >$haroot/role
+}
+
+hasrv -p xlate
+mount /srv/hasrv.xlate /n/xlate/
+
+cs=`{cat $haroot/state}
+echo $cs >'#ec/hastate'
+
+cr=`{cat $haroot/role}
+xlcfg=/n/kfs/conf/xlate
+rrcfg=/n/kfs/conf/rr
+rmcfg=/n/kfs/conf/remote
+if (~ $cr primary) {
+	hadaemon -d $haroot /bin/xlate -X -s
+}
+if not {
+	mkdir -p $haroot/$cr(2)
+	haprotect -r $xlcfg -r $rrcfg -r $rmcfg -d $haroot /bin/xlate -X -R -s
+}
+
+#starting haconf
+if (ps | grep -s 'haconf$') echo 'haconf already started'
+if not {
+	haconf &
+	
+	waitfile /srv/haconf '............'
+	mount -a /srv/haconf /n/ha
+	chmod a+rw /srv/haconf  # for user admin on ssh
+}

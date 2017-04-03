@@ -1,0 +1,38 @@
+#!/bin/rc
+
+z=`{basename $0}
+fn usage {
+	echo >[2=1] usage: $z '[ active | inactive ]'
+	exit usage
+}
+
+fn confirm {
+	echo Changing HA state affects VSX LUN service
+	echo Are you sure you want to set HA state $1'?'
+	echo -n Enter '''y''' for yes, '''n''' for no: '[n] '
+	x=`{read}
+	if (! ~ $x [yY]*) {
+		echo Action canceled
+		exit canceled
+	}
+}
+
+if (~ $1 '-?')
+	usage
+
+cs=/n/ha/state
+switch ($#*) {
+case 0
+	echo HASTATE
+	echo `{cat $cs}
+case 1
+	if (! ~ $1 active inactive)
+		usage
+	confirm $1
+	fprint $cs $1
+	if (~ `{cat $cs} $1) {
+		echo State changed to $1
+	}
+case *
+	usage
+}

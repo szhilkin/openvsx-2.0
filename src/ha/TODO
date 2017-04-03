@@ -1,0 +1,11 @@
+- cli commands to control
+- setup command
+- ha config file
+- implement release checking
+  - newest is active? alt: can only update inactive=>manually switch
+- test scenarios
+  - disconnect
+  - primary goes inactive
+  - secondary dies
+  - primary goes away, then back
+  - secondary comes up without primary

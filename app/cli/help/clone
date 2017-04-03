@@ -1,0 +1,7 @@
+The clone command creates a read/write copy of an LV.  Once cloned, the new LV shares data extents with the original LV.  All other LV characteristics (mac mask, config string, shadow target, LUN) are not shared.  When either the original or clone LV are written, extents are remapped to create LV private copies. 
+
+LV names must be alphanumeric, no more than 16 characters, and must be unique across all pools.
+
+Series ranging (see 'help series') may be used to specify clone LVs:
+
+	clone orig_LV LVclone00-10

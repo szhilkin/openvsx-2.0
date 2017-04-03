@@ -1,0 +1,20 @@
+</$objtype/mkfile
+
+TARG=rrfs
+
+OFILES=\
+	rrfs.$O\
+	../alib/liba.a \
+
+HFILES=\
+       list.h\
+
+BIN=../../app/$objtype/bin
+
+UPDATE=\
+	mkfile\
+	$HFILES\
+
+CFLAGS=$CFLAGS -I../alib
+
+</sys/src/cmd/mkone

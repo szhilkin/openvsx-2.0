@@ -1,0 +1,15 @@
+The clrsnapsched command clears a scheduled snapshot on one or more LVs. Confirmation is required.
+
+A schedule class is the first parameter. This may be hourly, daily, weekly, monthly, or yearly.
+
+The second parameter is the class dependent time specifier. See 'help setsnapsched' for details.
+
+The third parameter, and additional optional parameters, are LV names.
+
+Clears a scheduled snapshot on lv1 on 27th minute of every hour.
+
+	clrsnapsched hourly @27 lv1
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	clrsnapsched h @15 LV00-10

@@ -1,0 +1,7 @@
+The lvresize command resizes logical volumes (LVs).  The size of the LV must be entered in decimal form with a T, G, M or K suffix to indicate the size in Terabytes, Gigabytes, Megabytes, or Kilobytes, respectively. If no suffix is specified, the number specified is interpreted as a byte count.
+
+Only LV expansion is currently supported.  New extents are allocated from the pool to satisfy the new LV size.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	lvresize 100G lv00-10

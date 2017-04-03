@@ -1,0 +1,3 @@
+The harole command defines the primary (main) VSX or secondary (back up) VSX appliance in an HA configuration. In a single VSX configuration, the VSX appliance is primary by default and should not be changed to secondary.  In a fault-tolerant HA configuration utilizing a pair of VSX appliances, one unit should be configured as the primary VSX and the other as the secondary.  The secondary VSX monitors the primary over a SAN connection.  If the SAN connection fails or the primary itself becomes inactive (see 'help hastate'), the secondary becomes active and serves the VSX core configuration.
+
+The HA role should be defined once at configuration time and should not be changed in a running config.

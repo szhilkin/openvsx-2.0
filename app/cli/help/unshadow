@@ -1,0 +1,5 @@
+The unshadow command removes the VSX shadow attribute from one or more specified LVs. If the LV is a shadowrecv LV snapshot schedules are also cleared.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	unshadow LV00-10

@@ -1,0 +1,9 @@
+The snap command creates LV snapshots for one or more LVs.  LV snapshot names are automatically generated and are numbered sequentially starting from 1, using the LV parent as a prefix (LVname.1, LVname.2, ...).  Once a snapshot has been taken, the snapshot shares data extents with the parent LV.  Other LV characteristics (mac mask, config string, LUN) are not shared.  When the parent LV is written, extents are remapped to create LV private copies, leaving snapshot extents forever read-only.
+
+If the parent LV is shadow enabled (see 'help shadow'), each snapshot is asynchronously written to the specified remote VSX shadow target LUN.
+
+Snapshots can be displayed using the lvsnaps command.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	snap LV00-10

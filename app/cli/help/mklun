@@ -1,0 +1,7 @@
+The mklun command assigns an export LUN ID (shelf.lun) to an LV.  The shelf portion of the LUN must exist within the shelf address range assigned to the VSX (see 'help shelf').  The lun portion of the LUN must be between 0 and 254 inclusive.
+
+The mklun command has two possible executions.  For a simple LUN assignment to an LV, the 'to' keyword may be omitted.  To assign multiple LUNs to LVs, balance an equal number of LVs and LUNs separated by the 'to' keyword.  The first LV specified is matched to the first LUN, following by the second LV to the second LUN, and so on.  The number of specified LVs must match the number of LUNs.
+
+Series ranging (see 'help series') may be used to specify LVs and LUNs:
+
+	mklun LV00-10 to 100.0-10

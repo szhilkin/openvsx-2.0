@@ -1,0 +1,3 @@
+List the security parameters for a remote VSX at IP address.
+
+Without an argument list all security parameters in IP address lexical order.

@@ -1,0 +1,18 @@
+shadowrecv RNAME source_LV [...] to LV [...]
+
+Make LV a shadow target for receiving snapshots from the source_LV at the remote VSX-pair RNAME.
+
+TCP port 17760 is used to listen for connections from a shadowsend.
+
+This command fails if:
+
+   * RNAME was not defined by setremote
+   * LV has a LUN assigned to it
+   * LV is used for shadowsend
+   * LV is a snapshot LV
+   * LV has data that is not in its most recent snapshot
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+        shadowrecv Tulsa LVa to LVb
+        shadowrecv Tulsa LV50-55 to LV70-75

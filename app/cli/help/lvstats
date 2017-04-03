@@ -1,0 +1,5 @@
+The lvstats command displays the I/O statistics for a LV. The MB/s, average latency, and maximum latency for reads and writes are displayed. The -s flag followed by a number between 1 and 30 specifies the number of seconds in the past to pull statistics. The default value is four seconds. 
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	lvstats LV00-10

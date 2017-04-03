@@ -1,0 +1,9 @@
+The mkpool command creates an empty pool.  A VSX may only contain 32 pools. Physical volumes (PVs) can be added to the pool using the mkpv command.
+
+By default LV data extent allocation mode is concat, where extents are allocated to an LV from the first PV that has enough extents. Use setpoolmode to make the pool striped, where LV data extents are allocated round-robin from all PVs in the pool.
+
+Pool names must be unique, alphanumeric, and no more than 16 characters.
+
+Series ranging (see 'help series') may be used to specify pools:
+
+	mkpool POOL00-10

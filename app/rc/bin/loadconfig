@@ -1,0 +1,37 @@
+#!/bin/rc
+
+z=`{basename $0}
+fn usage {
+	echo >[1=2] usage: $z '[IPaddress]'
+	exit usage
+}
+
+if (~ $1 '-?')
+	usage
+
+if (~ $haroot '')
+	haroot=/n/kfs/conf/ha
+
+avail=($haroot/[0-9]*)
+
+switch $#* {
+case 0
+	if (~ $#avail 0)
+		echo No available configurations
+	if not {
+		echo Please specify one of the following configurations to load:
+		for (i in $avail) echo -n `{basename $i} ' '
+		echo
+		exit pickone
+	}
+case 1
+	if (! test -r $haroot/$1/xlate) {
+		echo error: config not found for $1
+		exit noconfig
+	}
+	disk/kfscmd allow
+	cp $haroot/$1/xlate /n/kfs/conf/xlate
+	disk/kfscmd disallow
+case *
+	usage
+}

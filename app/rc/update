@@ -1,0 +1,31 @@
+#!/bin/rc
+
+# Applications specific tasks and checks to perform upon upgrade
+# $1 - Update pkg name
+# Prints to stdout are interpreted as failure messages
+
+# On downgrade to 1.* remove releases file so that subsequent upgrade
+# sets releaselast to "unknown" instead of nil.
+# No checks for 2.0.X releases
+switch ($1) {
+case VSX-1.*
+	rm -f /n/kfs/releases
+	exit
+case VSX-2.0.*
+	exit
+}
+# Check xlate file for legacy luns
+role=`{cat /n/kfs/conf/ha/role}
+if (~ secondary $role) {
+	elpeer=`{echo $role | awk '{print $2}'}
+	xlate=/n/kfs/conf/ha/$elpeer/xlate
+}
+if not
+	xlate=/n/kfs/conf/xlate
+
+if (test -r $xlate) {
+	if (grep -s '^	.*:[^0]' $xlate)
+		echo Legacy lun detected
+}
+
+exit

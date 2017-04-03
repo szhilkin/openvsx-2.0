@@ -1,0 +1,5 @@
+Set security information for a remote VSX at IP address. Specify encrypt to encrypt the connection to the remote VSX using 128-bit AES. Specify null to not encrypt the connection to the remote VSX. Specify the hash value of the certificate presented by the remote VSX.
+
+1024-bit RSA is used for cryptography. SHA-1 is used for data integrity.
+
+"setsecurity address" removes the security parameters for address. The remove fails if address is used by a setremote command.

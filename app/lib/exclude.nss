@@ -1,0 +1,6 @@
+- xlate/lv/.*/snap$
+- xlate/lv/.*/ctl$
+- xlate/ctl$
+- xlate/pool/.*/ctl$
+- xlate/pool/.*/split$
+- xlate/lun/.*/ctl$

@@ -1,0 +1,7 @@
+The snaplimit command displays the snapshot limit for scheduled snapshots of LVs. If no LVs are given all LV scheduled snapshot limits are printed.
+
+For more information on the snapshot limit see 'help setsnaplimit'. 
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	snaplimit LV00-10

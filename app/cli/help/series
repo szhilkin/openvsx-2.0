@@ -1,0 +1,12 @@
+The series command permits testing of series expansion rules used for specifying pool, PV, LV, and LUN ranges.  The expansion rule is simple; any two sets of numbers separated by a dash will be range expanded and distributed across any adjacent identifiers.  The first number in the range may be zero filled to indicate a zero fill padding for the entire range.  E.g.:
+
+series POOL00-10
+POOL00 POOL01 POOL02 POOL03 POOL04 POOL05 POOL06 POOL07 POOL08 POOL09 POOL10
+
+series LV000-5
+LV000 LV001 LV002 LV003 LV004 LV005
+
+series 100.0-10
+100.0 100.1 100.2 100.3 100.4 100.5 100.6 100.7 100.8 100.9 100.10
+
+Zero filling is recommended when dealing with large quantities of objects to ensure proper lexical sorting in pools, lvs, lvsnaps output.

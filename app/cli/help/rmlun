@@ -1,0 +1,5 @@
+The rmlun command disassociates one or more VSX LUNs from their associated LVs.  For removal, the LUN must be offline.
+
+Series ranging may be used to specify multiple LUNs:
+
+	rmlun 100.0-10

@@ -1,0 +1,3 @@
+Return the hash of the certificate for this VSX. A remote VSX uses this hash value in a setsecurity command to accept the certificate presented by this VSX.
+
+Each VSX has a unique private key and certificate.

@@ -1,0 +1,21 @@
+</$objtype/mkfile
+
+LIB=liba.a
+CFILES=\
+	ctime.c \
+	haconfig.c\
+	addr.c\
+
+OFILES=${CFILES:%.c=%.$O}
+
+HFILES=alib.h
+
+UPDATE=mkfile\
+	$HFILES\
+	$CFILES\
+
+CLEANFILES=$LIB
+
+</sys/src/cmd/mksyslib
+
+profile.$O: /sys/include/tos.h

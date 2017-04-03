@@ -1,0 +1,5 @@
+The readonly command sets one or more specified LVs to read-only (r/o) mode.  An LV in read-only mode does not accept writes to its assigned LUN when exported on the SAN.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	readonly LV00-10

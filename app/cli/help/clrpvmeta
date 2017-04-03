@@ -1,0 +1,5 @@
+The clrpvmeta command clears the metadata for one or more PVs.  To be cleared a PV may not already be used and it must have metadata.  Confirmation is required.
+
+Series ranging (see 'help series') may be used to specify PVs:
+
+	clrpvmeta 100.0-10

@@ -1,0 +1,20 @@
+#!/bin/rc
+
+z=`{basename $0}
+fn usage {
+	echo >[1=2] usage: $z
+	exit usage
+}
+if (~ $1 '-?')
+	usage
+
+ip=`{myipaddr}
+if (~ $ip '')
+	ip=unk
+f=$(ip)^_^`{date -n}^.xlstax
+
+for (p in `{ps | grep 'xlate$' | awk '{print $2}'}){
+	echo 'lstk()' | acid $p
+} >>/app/scp/$f
+
+echo '#'  scp admin@$ip:$f .

@@ -1,0 +1,5 @@
+The /resetserial command resets the serial number of LVs. 
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	/resetserial LV00-10

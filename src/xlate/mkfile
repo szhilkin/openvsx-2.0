@@ -1,0 +1,37 @@
+</$objtype/mkfile
+
+TARG=xlate
+OFILES= \
+	etherdrive.$O \
+	ctl.$O \
+	xlate.$O \
+	xlatefs.$O \
+	targ.$O \
+	parse.$O \
+	dump.$O \
+	xinc386.$O \
+	readconf.$O \
+	xtntcopy.$O \
+	restrict.$O \
+	iofilter.$O\
+	utils.$O \
+	shadow.$O \
+	sched.$O \
+	remote.$O \
+	node.$O \
+	silver.$O \
+	stat.$O \
+	shadowclient.$O \
+	shadowserver.$O \
+	shadowsendhs.$O \
+	shadowrecvhs.$O \
+	../alib/liba.a \
+
+HFILES=dat.h fns.h
+BIN=../../app/$objtype/bin
+</sys/src/cmd/mkone
+
+CFLAGS=$CFLAGS -I../alib
+
+syms:V:
+	$CC -a $CFLAGS *.c >syms

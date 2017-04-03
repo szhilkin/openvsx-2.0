@@ -1,0 +1,5 @@
+The rmpv command removes one or more PVs from their associated pools.  For removal, a PV may not have any allocated extents used by pool LVs.  Confirmation is required.
+
+Series ranging (see 'help series') may be used to specify PVs:
+
+	rmpv 100.0-10

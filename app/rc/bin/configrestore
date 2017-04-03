@@ -1,0 +1,108 @@
+#!/bin/rc
+
+z=`{basename $0}
+myaddr=''
+p=/app/scp
+f=checksums
+
+fn usage {
+	echo >[1=2] usage: $z [ IP_yyyymmdd.hhmmss.vsxcfg ]
+	exit usage
+}
+
+fn checksum {
+	cat $p/$f | while (ln=`{read}) {
+		s=`{ echo $ln | awk '{print $1}' }
+		n=`{ echo $ln | awk '{print $2}' }
+		if (test $#n -ne 1 || ! test -e $n) {
+			echo >[1=2] error: vsxcfg file failure - please verify vsxcfg source
+			exit nofile
+		}
+		if (! ~ $s `{md5sum $n}) {
+			echo >[1=2] error: vsxcfg checksum failure - please verify vsxcfg source
+			exit badvsxcfg
+		}
+		shift
+	}
+}
+
+fn xtar {
+	cat $p/$f | while (ln=`{read}) {
+		n=`{ echo $ln | awk '{print $2}' }
+		if (~ $n *.tar)
+			tar xTRf $n > /dev/null >[2=1]
+		shift
+	}
+}
+
+if (~ $1 '-?')
+	usage
+
+switch ($#*) {
+case 0
+	if (ls $p/*.vsxcfg > /dev/null >[2=1]) {
+		echo 'Uploaded restore files are:'
+		echo
+		lc $p/*.vsxcfg
+		echo
+		echo 'Select file to restore and run: '$z' name.vsxcfg'
+	}
+	if not {
+		myaddr=`{myipaddr}
+		if (~ $myaddr '') {
+			echo Set IP address first.  See help ipaddress.
+			exit unset
+		}
+		echo There are no restore files.
+		echo To upload a file:
+		echo '#' scp name.vsxcfg admin@$myaddr:
+	}
+case 1
+	if (! test -r $p/$1) {
+		echo error: $1 does not exist
+		exit nofile
+	}
+	if (test -e /n/kfs/conf/xlate) {
+		echo 'error: not able to overwrite current configuration.'
+		echo 'Use factoryreset to wipe current configuration.'
+		exit 'conf detected'
+	}
+	echo Warning: This is not a data restore feature.
+	echo This feature is used for VSX replacement or restore a prior VSX configuration.
+	echo
+	echo Restoring VSX to $1 erases all local configuration,
+	echo destroys storage configuration and requires a system reboot.  Continue?
+	echo -n Enter '''y''' for yes, '''n''' for no: '[n] '
+		if (! ~ `{read} [yY]*) {
+			echo Action canceled
+			exit canceled
+		}
+	if (! tar xRf $p/$1 > /dev/null >[2=1]) {
+		echo error: $1 is not a valid .vsxcfg file
+		exit tarfailed
+	}
+	checksum
+	if (test -e $p && ! ~ $serial `{cat $p/serial}) {
+		echo
+		echo WARNING: $1 came from a different VSX
+		echo Data corruption is possible if two VSXes are using the same PVs and LUNs
+		echo Is VSX with serial number $serial intended to
+		echo replace VSX with serial number `{cat $p/serial}?
+		echo -n Enter '''y''' for yes, '''n''' for no: '[n] '
+		if (! ~ `{read} [yY]*) {
+			echo Action canceled
+			exit canceled
+		}
+	}
+	syslog.rc $z confirmed.  Converting VSX to $1 configuration
+	cp /n/kfs/conf/ip $p/.
+	disk/kfscmd allow
+	rm -rf /n/kfs/*
+	xtar
+	{ grep syslog /n/kfs/conf/ip; grep -v syslog $p/ip } > $p/nip
+	mv $p/nip /n/kfs/conf/ip
+	shutdown
+	echo reboot > /dev/reboot
+case *
+	default
+}

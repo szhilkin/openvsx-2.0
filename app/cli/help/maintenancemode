@@ -1,0 +1,1 @@
+The maintenancemode command enables or disables maintenance mode on the VSX, raising the threshold for i/o timeouts on PV targets from the default of 30 seconds to 3 minutes.  This capability is useful in updating SR/SRX CorOS releases to give the appliances sufficient time to reboot without failing PV mirrors or giving i/o errors back to initiator systems.

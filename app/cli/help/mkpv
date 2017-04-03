@@ -1,0 +1,11 @@
+The mkpv command formats an SR/SRX target LUN as a Physical Volume (PV), adding its extents to the unallocated (free) space of a pool.  The specified pool must already exist.  A pool may only contain 128 PVs.  The following restrictions are necessary to format a target LUN:
+
+The LUN is online
+The LUN does not have any MAC masks configured
+The LUN has no data stored on it (it will be lost in format)
+The LUN is not being used by any other initiators or Coraid appliances
+The LUN is not already allocated as a PV, mirror target, or shadow target.
+
+Series ranging (see 'help series') may be used to specify target LUNs:
+
+	mkpv pool 100.0-10

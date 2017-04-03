@@ -1,0 +1,10 @@
+Define a VSX-pair named RNAME with a primary IP address and an optional secondary IP address. RNAME is a local abstract name.
+
+This command fails if:
+
+   * RNAME exceeds 20 characters
+   * address has no security parameters
+   * address has been assigned by a previous setremote
+   * the primary address and the secondary address are the same
+
+setremote RNAME without more arguments removes the VSX-pair. The remove fails if RNAME is used by a shadowrecv or shadowsend command.

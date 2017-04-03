@@ -1,0 +1,28 @@
+#!/bin/rc
+#
+# convert VSX 1.0 config to VSX 1.3 config and erase 1.0 config
+#
+# called by app/rc/corosrc
+
+ip0=/n/kfs/conf/ipether0
+ip1=/n/kfs/conf/ipether1
+ipg=/n/kfs/conf/ipgw
+sysconf=/n/kfs/conf/sysconf
+
+if (test -f $ip0 || test -f $ip1) {
+	> /n/kfs/conf/ip
+        if (grep -s '\.' $ip0)
+                sed -n '/\./s/^/ether0=/p' $ip0 >> /n/kfs/conf/ip
+        if (grep -s '\.' $ip1)
+                sed -n '/\./s/^/ether1=/p' $ip1 >> /n/kfs/conf/ip
+        rm $ip0 $ip1
+}
+if (test -f $ipg) {
+        if (grep -s '\.' $ipg)
+                sed -n '/\./s/^/ipgw=/p' $ipg >> /n/kfs/conf/ip
+        rm $ipg
+}
+if (test -f $sysconf) {
+	sed -n '/^ip=/s//syslog=/p' $sysconf >> /n/kfs/conf/ip
+	rm $sysconf
+}

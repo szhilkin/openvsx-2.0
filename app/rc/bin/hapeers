@@ -1,0 +1,27 @@
+#!/bin/rc
+
+z = `{basename $0}
+fn usage {
+	echo >[2=1] usage: $z
+	exit usage
+}
+
+if (~ $1 '-?')
+	usage
+
+p=/n/nsd/targets
+switch ($#*) {
+case 0
+	echo SHELF ADDRESS MODEL | awk '{ printf "%-8s %16s %20s\n", $1, $2, $3 }'
+	u=`{grep VSX $p | grep unset}
+	s=`{grep VSX $p | grep -v unset | sort -t: -n +1 -2}
+	for (i in $u $s) {
+		n=`{echo $i | awk -F: '{ print $3 }'}
+		t=`{aux/number $n' & 1'}
+		if (~ $t 1) {
+			echo $i | awk -F: '{ printf "%-8s %16s %20s\n", $2, $1, $5 }'
+		}
+	}
+case *
+	usage
+}

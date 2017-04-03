@@ -1,0 +1,1 @@
+The hastatus command displays HA state for the high availability (HA) VSX.  hastatus displays the local HA role, local HA state, peer SAN address, connection status, and peer HA state.  On the secondary, the displayed peer is the primary.  On the primary, the displayed peer is the secondary.

@@ -1,0 +1,5 @@
+The /clrreservation command clears all reservation on LVs. Confirmation is required.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	/clrreservation LV00-10

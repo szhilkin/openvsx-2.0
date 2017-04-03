@@ -1,0 +1,9 @@
+The mask command displays MAC address masks for all LVs with at least one configured mask.  The display list can be restricted by providing one or more LV arguments.  The displayed status includes LV name, assigned LUN, and mask list.
+
+The mask command also modifies mask lists by providing +MAC and -MAC arguments prior to LV specification.  To add a MAC address, prefix the MAC address with a plus (+). To remove a MAC address, prefix the MAC address with a minus (-).
+
+MAC masks assigned to an LV are not propogated across clones and snaps; they must be set explicitly for each LV and snap.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	 mask +001004010203 -001004040506 LV00-10

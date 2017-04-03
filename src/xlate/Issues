@@ -1,0 +1,53 @@
+First character: space=open, ?=can't reproduce, x=think it's fixed
+
+x	Snaps are broken. 
+x	Logical Volume labels are not set by default. 
+x	Can't remove PVs from a pool. Ever.
+x	Need to filter PV names. Should not allow "ctl", "label", and "status". 
+x	Mirrors don't check target lengths.
+x	Mirrors don't check if the target is already in the pool.
+x	Need to remove the rmlv lv-name from the pool's ctl file 
+x	Looks like we're treating the number of sectors on a target 
+x	initpvt() doesn't set the new PVs size correctly. 
+x	snaps don't enforce read-only behavior. 
+x	Logical Volumes refuse to span physical volumes. 
+x	reading to the end of a pv or lv crashes in memmove with -1
+x	remove pvname from addpv
+x	status for pool, pv, lv and lun done
+x	mirror pvs works
+x	snapshadow works
+x	Exported luns are automatically online.
+x	Can't re-export a lun that has been unexported.
+x	add 'echo discover >/xlate/targ/ctl'
+x	Writing to a mirror silvering mirror will sometimes hang the VSX.
+x	I didn't see a check on mirror the target to ensure it isn't part of the pool.
+x	addremove panic; see csv email
+x	pv's keep track of number of free extents?
+x	check against the number of free extents before actions	
+x	something funny with target; linux and solaris can't come up.
+x	make sure save and restore work.
+x	make luns readonly
+x	reserve storage for logical volumes
+x	lv's larger than 2.5T (xlmklv, update lv, remove lv)
+
+	add legacy lun
+	Add VLAN
+	add failover 
+x	Shadow is broken when the target is another VSX.
+x	Can't read/write config file assigned with -c flag.
+x	Readonly permission lun permission is not honored.
+?	Lucas reported lun status file weirdness when he created 
+		two volumes and then removed one.
+x	Clone does not honor reserve %.
+x	If a user sets a reserve % greater than the current 
+		free % all checks are bypassed.
+x	If a user has a lower free % due to COW than is 
+		designed by the pools reserve, all checks are bypassed.
+?	The LVs exported lun is reported as the difference 
+		between of the value from the base shelf address. 
+		Shelf 32 would reports target 33.1 as 1.1. Should report 33.1.
+	Mirrors are broken (When I offline one pv on the SR the VSX freaks).
+	performance tuning (especially COW)
+	filesystem has some small memory leaks.
+	f3 doesn't seem to cause a snap.
+

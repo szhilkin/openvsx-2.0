@@ -1,0 +1,7 @@
+Disables a hold on a snapshot. Snapshots without a hold can be automatically deleted.
+
+The hold state for a snapshot is displayed using the lvsnaps command.
+
+Series ranging (see 'help series') may be used to specify snapshots:
+
+	clrhold LVm.1-10

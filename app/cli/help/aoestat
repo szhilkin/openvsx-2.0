@@ -1,0 +1,3 @@
+The aoestat command displays all AoE LUNs on the SAN.  The display list can be restricted by providing one or more target LUN arguments.  The displayed status includes the AoE target (shelf.lun), LUN size in gigabytes, and VSX ports for access.  The -a flag displays a target's MAC address / local port map(s) and configuration string.  The -s flag sorts the target list by size.
+
+The VSX automatically handles load balancing across all available interfaces for a given target LUN.

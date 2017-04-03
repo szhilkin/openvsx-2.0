@@ -1,0 +1,32 @@
+#!/bin/rc
+
+z=`{basename $0}
+fn usage {
+	echo >[1=2] usage: $z baseline statfile ...
+	exit usage
+}
+if (~ $1 '-?')
+	usage
+
+if (test $#* -lt 2)
+	usage
+
+baseline=$1
+shift
+if (! test -e $baseline) {
+        cat $* > $baseline
+        echo baseline saved run again to see deltas
+        exit
+}
+cat $* > /tmp/deltas.$pid
+
+awk -F ':' '
+NR == FNR { o[NR] = $2; next }
+NR != FNR {
+    delta = $2 - o[FNR]
+    if (delta != 0) {
+        print $1 ": " $2 - o[FNR]
+    }
+}' $baseline /tmp/deltas.$pid
+
+mv /tmp/deltas.$pid $baseline

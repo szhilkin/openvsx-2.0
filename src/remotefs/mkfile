@@ -1,0 +1,11 @@
+</$objtype/mkfile
+
+liba=../alib/liba.a
+
+TARG=remotefs
+OFILES=$liba
+BIN=../../app/$objtype/bin
+
+CFLAGS=$CFLAGS -I../xlate -I../alib
+
+</sys/src/cmd/mkmany

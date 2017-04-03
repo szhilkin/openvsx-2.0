@@ -1,0 +1,108 @@
+#!/bin/rc
+
+z = `{basename $0}
+fn usage {
+	echo >[2=1] usage: $z '[ primary | secondary { address } ]'
+	echo >[2=1] Use hapeers for available VSX SAN addresses
+	exit usage
+}
+
+fn confirm {
+	echo -n 'Enter '''y''' for yes, '''n''' for no.  Continue? [n] '
+	if (! ~ `{read} [yY]*) {
+		echo Action canceled
+		exit canceled
+	}
+}
+
+copt=()
+fn configcheck {
+	echo Transitioning from Secondary to Primary requires configuration guidance.
+	echo Would you like to retain the configuration for the primary being
+	echo protected or remove and start over with an empty 'configuration?'
+	echo
+	while (! ~ $copt new retain) {
+		echo Enter '''retain''' to retain config, or '''new''' to remove config.
+		echo -n '? [] '
+		copt=`{read}
+	}
+}
+
+fn addresscheck {
+	if (grep -s $1 /net/el/addr) {
+		echo Cannot set role to secondary with local SAN address
+		exit address
+	}
+	if (! grep -s $1 /n/nsd/targets) {
+		echo VSX SAN address $1 not found, use hapeers for available VSX SAN addresses
+		exit notfound
+	}
+}
+
+if (~ $1 '-?')
+	usage
+
+cr=/n/ha/role
+crem=/n/ha/remote
+r=`{cat $cr}
+rem=`{cat $crem}
+switch ($#*) {
+case 0
+	echo HAROLE
+	if (~ $r secondary) {
+		echo $r $rem(1)
+	}
+	if not
+		echo $r
+case 1
+	if (! ~ $1 primary)
+		usage
+	if (~ $r primary) {
+		echo error: primary role already set
+		exit samerole
+	}
+	echo Changing role requires reboot
+	confirm
+	echo
+	configcheck
+	echo HA $r Node. Role set to $1 for next boot, rebooting
+	fprint $cr $1 $copt
+case 2
+	if (! ~ $1 secondary)
+		usage
+	addresscheck $2
+	echo 
+	echo Both secondary and primary should be configured
+	echo with identical clocks using timesource.  See 'help harole'
+	echo for more information.
+	if (~ $r primary) { 
+		echo
+		echo Setting role to secondary DESTROYS THE CURRENT DATA
+		echo CONFIGURATION, LOSING ALL ASSOCIATED DATA.  SHELF
+		echo BASE ADDRESS, POOLS, PVS and LVS WILL BE LOST.
+		echo
+		echo Changing role requires reboot
+		echo
+		confirm
+		echo HA $r node set to secondary protecting $2 for next boot, rebooting
+	}
+	if not {
+		echo
+		if (~ `{cat /n/ha/state} active) {
+			echo Changing secondary address while active DESTROYS VSX $2 DATA
+			echo CONFIGURATION, LOSING ALL ASSOCIATED DATA AND FORCED INACTIVE.
+			echo SHELF, BASE ADDRESS, POOLS, PVS and LVS WILL BE LOST
+		}
+		if not {
+			echo Changing secondary address stops HA monitoring of VSX $rem(1)
+			echo to protect VSX $2
+			echo VSX $rem(1) will not be protected
+		}
+		echo
+		confirm
+		echo HA $r node protecting $2
+	}
+	fprint $cr $*
+case *
+	usage
+}

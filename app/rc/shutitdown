@@ -1,0 +1,11 @@
+#!/bin/rc
+
+# This script is invoked before kfs halt on factoryreset, halt, and update.
+# Please add application specific shutdown routines here
+
+# prevent potential I²C lock at boot:
+kill envmon | rc
+kill smbfs | rc
+
+# VSX-4353
+kill hadaemon | rc

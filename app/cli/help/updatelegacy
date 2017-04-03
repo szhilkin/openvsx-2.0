@@ -1,0 +1,3 @@
+The /updatelegacy command updates the PV format for legacy luns created on VSX-1.3.5 or previous releases. The new format offers greater resilience when the legacy PV is mirrored. The update will not proceed if PVs are missing from any pool. During the update all online luns will temporarily go offline. After the update those luns will return to their former online state.
+
+This update is recommended for all VSX users with legacy luns created in VSX-1.3.5 or previous releases.

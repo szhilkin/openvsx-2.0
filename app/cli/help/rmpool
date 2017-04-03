@@ -1,0 +1,5 @@
+The rmpool command removes one or more pools from the VSX.  For removal, a pool must contain no PVs.
+
+Series ranging (see 'help series') may be used to specify multiple pools:
+
+	rmpool POOL00-10

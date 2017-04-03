@@ -1,0 +1,17 @@
+This is the source for the Coraid VSX provided by the previous owners
+of the technology.  Apparently, as is the case with the SRX, the
+Coraid infrastructure required to build release were lost in the
+turmoil after the reduction in force in January of 2015.  All internal
+documentation on how to build the software was reportedly kept on web
+based wikis that disappeared.  It is no longer
+possible to create release as it was at Coraid in 2014.
+
+The VSX, however, was a user level space system.  The VSX is an AoE
+network storage virtualizer.  Basically it's NAT for AoE requests.
+The code in srx/xlate compile into a user level daemon that does this
+translation, and, in Plan 9 style, it implements a file server to
+interact with the command line interpreter.
+  
+
+  Brantley
+ 

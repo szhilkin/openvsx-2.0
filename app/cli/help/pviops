@@ -1,0 +1,5 @@
+The pviops command displays the IOPS for a PV. IOPS of 512 bytes, 1024 bytes, 2048 bytes, 4096 bytes, 8192 bytes, and operations greater than 8192 bytes are displayed for reads and writes. If a frame falls between two sizes the larger size is incremented. A transaction of 4608 bytes would increment the 8192 byte counter. The -s flag followed by a number between 1 and 30 specifies the number of seconds in the past to pull IOPS. The default value is four seconds. 
+
+Series ranging (see 'help series') may be used to specify PVs:
+
+	pviops 100.1-5

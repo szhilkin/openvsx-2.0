@@ -1,0 +1,5 @@
+The readwrite command sets one or more specified LVs to read/write (r/w) mode.  An LV in read/write mode accepts writes to its assigned LUN when exported on the SAN.  Confirmation is required.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	readwrite LV00-10

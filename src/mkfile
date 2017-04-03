@@ -1,0 +1,25 @@
+</$objtype/mkfile
+
+DIRS=`{ls -l | sed '/^d/!d; s/.* //'}
+
+all install:V:
+	for(i in $DIRS) @{
+		cd $i
+		echo mk $i $target
+		mk $MKFLAGS $target
+	}
+	@{
+		cd xlate; mk $MKFLAGS xlate.acid &&
+		cat xlate.acid acidlib > xlatelib.acid
+	}
+	@{
+		cd ha; mk $MKFLAGS hadaemon.acid &&
+		cat hadaemon.acid acidlib > halib.acid
+	}
+
+clean:V:
+	for (i in $DIRS) @{
+		cd $i
+		echo mk $i $target
+		mk $target
+	}

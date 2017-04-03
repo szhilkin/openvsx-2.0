@@ -1,0 +1,1 @@
+The VSX appliance sends a discovery message out on all SAN interfaces to automatically discover new SR/SRX LUNs every 15 seconds.  The aoediscover command forces this discovery message to be sent immediately.

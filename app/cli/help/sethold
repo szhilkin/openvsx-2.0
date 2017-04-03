@@ -1,0 +1,7 @@
+Enables a hold on a snapshot. Snapshots with a hold enabled are never automatically deleted. They can be manually deleted with the rmlv command.
+
+The hold state for a snapshot is displayed using the lvsnaps command.
+
+Series ranging (see 'help series') may be used to specify snapshots:
+
+	sethold LVm.1-10

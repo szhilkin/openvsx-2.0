@@ -1,0 +1,11 @@
+The configsave command captures the current configuration of the VSX and stores it in the local holding area for download by scp/ftp.  The configuration file is named by the VSX's ip address and timestamp, IP_yyyymmdd.hhmmss.vsxcfg, with the following timestamp parameters (in GMT):
+  yyyy - year	mm - month	dd - day
+    hh - hour	mm - minute	ss - second
+Configsave does not save the configuration or data of any attached Coraid SR/SRX appliances.  This is primarily used in a VSX replacement scenario where the new VSX needs to be an exact replica of the old VSX:
+  harole		IPaddresses
+  hastate		IPgateway
+  shelf			syslog
+  pools			timezone
+  PVs and mirrors	timesource
+  LVs and shadows
+  LUNs

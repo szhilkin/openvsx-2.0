@@ -1,0 +1,42 @@
+#!/bin/rc
+
+cr = `{cat $haroot/role}
+cs=`{cat '#ec/hastate'}
+echo
+echo This is my $cr xlate conf file
+if (~ $cr primary) {
+	catsos /n/kfs/conf/xlate
+	catsos /n/kfs/conf/rr
+} 
+if not
+	catsos $haroot/*/xlate
+
+if (! test -s /tmp/broken) {
+	if (~ $cs active) {
+		exesos aoestat -a
+		exesos pools
+		exesos pools -a
+		exesos pvs
+		exesos pvs -a
+		exesos lvs
+		exesos lvs -a
+		exesos luns
+		exesos snaplimit
+		exesos snapsched
+		exesos lvsnaps
+		exesos lvsnaps -a
+		exesos wstat
+		exesos pvstats
+		exesos lvstats
+		exesos mask
+		exesos shelf
+		exesos security
+		exesos remote
+		catsos /n/xlate/perf
+	}
+	exesos harole
+	exesos hastate
+	exesos hastatus
+}
+
+catsos /tmp/shadow*

@@ -1,0 +1,5 @@
+The lvthin command transforms thick provisioned LVs into thin provisioned LVs. Extents that have been allocated, but not yet used, will be freed. 
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+        lvthin lv00-10

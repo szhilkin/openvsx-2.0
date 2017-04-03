@@ -1,0 +1,1 @@
+The xlatestacks command captures a backtrace of each VSX core process, storing it in the local file holding area.  This debugging information is necessary to diagnose cases where the core engine fails.

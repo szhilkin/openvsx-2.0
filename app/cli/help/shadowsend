@@ -1,0 +1,20 @@
+shadowsend RNAME LV [...] to target_LV [...]
+
+Configure the shadow process to send LV's snapshots to target_LV at remote VSX-pair RNAME.
+
+This command fails if:
+
+   * the remote VSX is unusable because both primary and secondary are either:
+      * unreachable
+      * fails authentication
+      * inactive
+   * the remote VSX does not have the named shadow source LV and shadow target LV configured for the sending VSX (shadowrecv)
+   * the shadow target LV is smaller than the source LV
+   * a snapshot with the same number does not have the same class and timestamp on both ends
+   * a snapshot with the same timestamp does not have the same number on both ends
+   * the most recent snapshot for the target LV does not exist for the source LV
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+        shadowsend Tulsa LV20-25
+        shadowsend Tulsa LV30-35 to LV60-65

@@ -1,0 +1,7 @@
+The snapsched command displays the characteristics of scheduled snapshots created by the setsnapsched command. See 'help setsnapsched' for more information on scheduled snapshot characteristics. If no LVs are given all LV scheduled snapshots are printed.
+
+The first column printed is the LV name. The second column is the class, which may be hourly, daily, weekly, monthly, or yearly. The third column is the time the snapshot will be taken. The last column is the retain count.
+
+Series ranging (see 'help series') may be used to specify LVs:
+
+	snapsched LV00-10

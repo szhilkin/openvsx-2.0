@@ -1,0 +1,5 @@
+The rmlv command removes one or more LVs, freeing unshared extents back into the pool unallocated (free) space.  LVs created by mklv, snap, clone, or mklegacy are all removed with rmlv.  For removal, the LV assigned LUN must be removed with rmlun.  The most recent snapshot of a shadow LV can not be removed because it is used to confirm that the shadow relationship makes sense during the handshake.  Confirmation is required.
+
+Series ranging (see 'help series') may be used to specify multiple LVs:
+
+	rmlv LV00-10

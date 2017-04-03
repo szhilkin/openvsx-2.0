@@ -1,0 +1,18 @@
+</$objtype/mkfile
+TARG=hadaemon haclient hapw dummy haprotect hacmd hasrv haconf
+BIN=../../app/$objtype/bin
+</sys/src/cmd/mkmany
+
+CFLAGS=$CFLAGS -I../alib
+
+hadaemon.$O: hadaemon.c dat.h fns.h
+haprotect.$O: haprotect.c dat.h fns.h
+util.$O: util.c dat.h
+
+$O.haconf: haconf.$O
+$O.hadaemon: hadaemon.$O util.$O
+	$O^l -o $O.hadaemon hadaemon.$O util.$O ../alib/liba.a
+
+$O.haprotect: haprotect.$O util.$O
+	$O^l -o $O.haprotect haprotect.$O util.$O ../alib/liba.a
+

@@ -1,0 +1,5 @@
+The offline command disables SAN access for one or more specified VSX LUNs.
+
+Series ranging (see 'help series') may be used to specify LUNs:
+
+	offline 100.0-10

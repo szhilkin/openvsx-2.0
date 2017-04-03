@@ -1,0 +1,114 @@
+|date
+Thu Aug 19 09:48:46 EDT 2010
+
+New scheme.  The notes of 8/8/10 are not the way
+I went.
+
+The targets, which could be any protocol, is a simple collection
+of threads that wait on aoe requests to arrive at an ethernet port.
+The Msg structure has the data, the file descriptor in a member named
+"port", and length of the data.
+
+A request arrives and is completed by the thread that read it.
+That is, unless it it a response.  If it is a response it must
+find the requestor in a table and rwake him up.
+
+So, for normal traffic we read a request, translate its address, relabel
+the request in a redirect frame and sent it off.  All done.
+
+If, however, it is a pv mirror, we have to wait around for the response, to
+assure that it has made it and the remote pv has gone 86 on us.  To do that
+the thread was given a slot in a ctag table.  It will send a request, and then
+rsleep on the ctag table entry.  Another thread will get the response,
+find the entry in the ctag table and rwake the original thread.
+
+This is certainly more Ken like than the state machines I've done in the past.
+It seem efficient as well.  There are few work handoffs.  The CO switch design
+done by Ken in the 1980's was the same basic structure, with a single process
+doing all the work for a given phone.
+
+Sun Aug  8 22:44:41 EDT 2010
+
+Notes on the AoE code for vsx.
+Aoe.c will be linked in with the rest.
+
+
+Entry points provided by aoe.c
+
+aoeinit
+	Setup stuff.
+	
+aoetick
+	Clock tick called every 1 ms.  Aoe uses it as it sees fit.
+
+aoebind
+	Add ethernet port to network
+
+aoeproc
+	Wait for and process an AoE request.  Should never return.
+	This is how we give processes to work on aoe messages.
+
+int aoeread(int target, void *, int leng, vlong offset)
+int aoewrite(int target, void *, int leng, vlong offset)
+	Do read or write to an aoe target.  Offset is in bytes, but
+	must be multiple of sectors.  This will allow us to have
+	targets that have sector sizes larger than 512 in the future.
+	These are blocking functions.
+
+aoeexport(int target, vlong length);
+	Add a target lun to the list of exported targets.
+	
+aoeoffline
+	Mark aoe off line
+	
+aoeonline
+	Mark lun on line.
+	
+aoeunexport
+	Nevermind.  We dont' care about target.
+
+aoemirror
+	Sync mirror a pair of targets.  Writes using either target
+	will be sent to both.  If one element failes, aoe will still
+	honor it's address.  This means that code that uses aoeread/aoewrite
+	doesn't have to know which side has broken.
+	
+aoemirresume
+	Informs the aoe code that it can continue to use the rediscovered 
+	mirror element.
+aoebreak
+	Tells aoe code to forget about one of the mirror elements.	
+	
+	
+Generally the aoeprocs will read a request, take action, only calling the
+xlate code when it need something, like to execute a q/c command or
+translate an IO address.
+
+Entry points used by aoe code.
+
+xldiscover
+	Called as the result of a discover response.
+	Aoe doesn't have to keep score, xlate does.
+
+int xlqc(int target, int op, uchar *str);
+	Do AoE operations on the query/config string of the exported target.
+	
+int xlate
+	See plan9.c for this function.  It's what gives you the new translation.
+	
+int xlmirfail
+	Tell xlate that a member of a mirror failed.
+	Aoe does keep track of these since aoe does the
+	actual mirroring.  Xlate is told when a partner in
+	a mirror fails so it can begin to keep track of the extents
+	that have changed since the mirror element went missing.
+
+void xlmirfound
+	Tell xlate that the mirror element is back.
+	
+
+	
+
+
+|date
+|fmt
